@@ -9,7 +9,7 @@
 #include "appli.h"
 
 /*
- * Initialisation de notre application, et des périphériques qu'elle utilise
+ * Initialisation de notrre application, et des périphériques qu'elle utilise
  */
 void APPLI_init(void)
 {
