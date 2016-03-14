@@ -24,6 +24,8 @@ void APPLI_init(void)
 
 	//Initialisation du touch-screen
 	TS_Init();
+
+	//lol
 }
 
 
