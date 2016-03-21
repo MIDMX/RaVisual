@@ -1,24 +1,23 @@
 # RaVisual
-You can find here the code dedicated to the 4th version of the RaVisual Firing systems (emitter only for the moment)
+You can find here the code dedicated to the 4th version of the RaVisual Firing systems (emitter only for the moment)<br/><br/>
 
+<b>What is new on this version ?</b>
+  
+  -Added 3.5" LCD 
 
-What is new on this version ?
+  -Added Encoders/potentiometer bank
 
--Added 3.5" LCD 
+  -implemented I2C controller for PAD & LED interfacing
 
--Added Encoders/potentiometer bank
+  -new LoRa transmission modules
+<br/><br/>
 
--implemented I2C controller for PAD & LED interfacing
-
--new LoRa transmission modules
-
-
-Coming soon: 
-
--CAD Files for enclosure
-
--SCHEMATICS & PCB
-
--Technical description
-
--user manual
+<b>Coming soon: </b>
+  
+  -CAD Files for enclosure
+  
+  -Schematics & PCB
+  
+  -Technical description
+  
+  -user manual
