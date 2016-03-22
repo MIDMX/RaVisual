@@ -7,7 +7,6 @@
 #define HT16K33_BLINK_DISPLAYON 0x01
 #define HT16K33_CMD_BRIGHTNESS  0xE0
 
- test
 /*
 void begin() {
 
