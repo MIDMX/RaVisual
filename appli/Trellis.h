@@ -23,10 +23,10 @@
 #define HT16K33_BLINK_1HZ    2
 #define HT16K33_BLINK_HALFHZ 3
 
+#include "macro_types.h"
 
 // this is the raw HT16K33 controller
-  Adafruit_Trellis(void);
-  void begin(uint8_t _addr);
+  void begin();
   void setBrightness(uint8_t b);
   void blinkRate(uint8_t b);
   void writeDisplay(void);
@@ -34,15 +34,10 @@
   void setLED(uint8_t x);
   void clrLED(uint8_t x);
   void init(uint8_t a);
+  void I2C1_init(void);
 
   uint16_t displaybuffer[8];
   uint8_t keys[6], lastkeys[6];
   uint8_t i2c_addr;
-
-  void begin(uint8_t _addr0 = 0x70, uint8_t _addr1 = 0x71,
-	     uint8_t _addr2 = 0x72, uint8_t _addr3 = 0x73,
-	     uint8_t _addr4 = 0x74, uint8_t _addr5 = 0x75,
-	     uint8_t _addr6 = 0x76, uint8_t _addr7 = 0x77);
-
 
 #endif // _TRELLIS_H_

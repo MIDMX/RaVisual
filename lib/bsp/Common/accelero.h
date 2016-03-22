@@ -78,7 +78,6 @@ typedef struct
   void      (*FilterConfig)(uint8_t);
   void      (*FilterCmd)(uint8_t);
   void      (*GetXYZ)(int16_t *);
-  void		(*DeInit)(void);
 }ACCELERO_DrvTypeDef;
 /**
   * @}

@@ -474,6 +474,29 @@ void create_rectangle(uint16_t Xpos, uint16_t Ypos, uint16_t width, uint16_t hei
 
 }
 
+void show_keyboard(){
+
+	LCD_SetFont(&Font16x24);
+
+	uint32_t i,j;
+
+	int plus = 0;
+	int offsetX = 60, offsetY = 50;
+	char inc[10];
+
+	for( i = 0; i < 3; i++){
+
+		for( j = 0; j < 3; j++){
+			plus++;
+			sprintf(inc,"%d",plus);
+			LCD_DrawCircle((j*100)+offsetX,((i*70))+offsetY,25,0xFFFF);
+			LCD_DisplayStringLine((i*70)+40,((j*100))+52,(uint8_t*)inc,0xffff,0x2104,LCD_NO_DISPLAY_ON_UART);
+		}
+	}
+}
+
+
+
 /**
   * @brief  Sets a display window
   * @param  Xpos: specifies the X bottom left position.

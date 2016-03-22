@@ -93,7 +93,6 @@ ACCELERO_DrvTypeDef Lis3dshDrv =
   0,
   0,
   LIS3DSH_ReadACC,
-  ACCELERO_IO_DeInit,
 };
 
 /**

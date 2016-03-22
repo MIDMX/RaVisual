@@ -1228,7 +1228,6 @@ void    ACCELERO_IO_Init(void);
 void    ACCELERO_IO_ITConfig(void);
 void    ACCELERO_IO_Write(uint8_t* pBuffer, uint8_t WriteAddr, uint16_t NumByteToWrite);
 void    ACCELERO_IO_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead);
-void	ACCELERO_IO_DeInit(void);
 
 #ifdef __cplusplus
 }

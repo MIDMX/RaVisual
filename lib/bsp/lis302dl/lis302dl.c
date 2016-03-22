@@ -95,7 +95,6 @@ ACCELERO_DrvTypeDef Lis302dlDrv =
   LIS302DL_FilterConfig,
   0,
   LIS302DL_ReadACC,
-  ACCELERO_IO_DeInit,
 };
 
 /**

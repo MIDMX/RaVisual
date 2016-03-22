@@ -1,36 +1,38 @@
-
-
 #include "Trellis.h"
-#include "stm32f4xx_hal.h"
-#include "macro_types.h"
-#include "main.h"
-#include "stm32f4_uart.h"
 #include "stm32f4_sys.h"
-#include "stm32f4xx_hal_i2c.h"
+#include "stm32f4xx_hal_rcc.h"
+#include "stm32f4xx_hal_gpio.h"
 
-#define SLAVE_ADDRESS 0x3D // the slave address (example)
+static const uint8_t
+  ledLUT[16] =
+    { 0x3A, 0x37, 0x35, 0x34,
+      0x28, 0x29, 0x23, 0x24,
+      0x16, 0x1B, 0x11, 0x10,
+      0x0E, 0x0D, 0x0C, 0x02 };
+
+
 #define HT16K33_BLINK_CMD       0x80
 #define HT16K33_BLINK_DISPLAYON 0x01
 #define HT16K33_CMD_BRIGHTNESS  0xE0
 
-I2C_Init(I2C1, TM_I2C_PinsPack_1, 100000);
+#define SLAVE_ADDRESS 0x4A // the slave address (example)
+
+
 
 /*
-void begin(uint8_t _addr = 0x70) {
-  i2c_addr = _addr;
+void begin() {
 
-  Wire.begin();
-
-  Wire.beginTransmission(i2c_addr);
-  Wire.write(0x21);  // turn on oscillator
-  Wire.endTransmission();
+  I2C1_init(); // initialize I2C peripheral
+  I2C_start(I2C1, SLAVE_ADDRESS<<1, I2C_Direction_Transmitter);
+  I2C_write(I2C1, 0x01); // write one byte to the slave
+  I2C_stop(I2C1); // stop the transmission
   blinkRate(HT16K33_BLINK_OFF);
   
   setBrightness(15); // max brightness
 
-  Wire.beginTransmission(i2c_addr);
-  Wire.write(0xA1);  // turn on interrupt, active low
-  Wire.endTransmission();
+  I2C_start(I2C1, SLAVE_ADDRESS<<1, I2C_Direction_Transmitter);
+  I2C_write(I2C1, 0x01); // write one byte to the slave
+  I2C_stop(I2C1); // stop the transmission
 
 }
 
@@ -49,29 +51,30 @@ void clrLED(uint8_t x) {
 
 void setBrightness(uint8_t b) {
   if (b > 15) b = 15;
-  Wire.beginTransmission(i2c_addr);
-  Wire.write(HT16K33_CMD_BRIGHTNESS | b);
-  Wire.endTransmission();  
+  I2C_start(I2C1, SLAVE_ADDRESS<<1, I2C_Direction_Transmitter);
+  I2C_write(I2C1, 0x01); // write one byte to the slave
+  I2C_stop(I2C1); // stop the transmission
+  I2C_write(I2C1, HT16K33_CMD_BRIGHTNESS | b);
+  I2C_stop(I2C1); // stop the transmission
 }
 
 void blinkRate(uint8_t b) {
-  Wire.beginTransmission(i2c_addr);
+  I2C_start(I2C1, SLAVE_ADDRESS<<1, I2C_Direction_Transmitter);
   if (b > 3) b = 0; // turn off if not sure
-  
-  Wire.write(HT16K33_BLINK_CMD | HT16K33_BLINK_DISPLAYON | (b << 1)); 
-  Wire.endTransmission();
+  I2C_write(I2C1,HT16K33_BLINK_CMD | HT16K33_BLINK_DISPLAYON | (b << 1));
+  I2C_stop(I2C1);
 }
 
 
 void writeDisplay(void) {
-  Wire.beginTransmission(i2c_addr);
-  Wire.write((uint8_t)0x00); // start at address $00
+I2C_start(I2C1, SLAVE_ADDRESS<<1, I2C_Direction_Transmitter);
+I2C_write(I2C1,(uint8_t)0x00); // start at address $00
 
   for (uint8_t i=0; i<8; i++) {
-    Wire.write(displaybuffer[i] & 0xFF);    
-    Wire.write(displaybuffer[i] >> 8);    
+	  I2C_write(I2C1,displaybuffer[i] & 0xFF);
+	  I2C_write(I2C1,displaybuffer[i] >> 8);
   }
-  Wire.endTransmission();  
+  I2C_stop(I2C1);
 }
 
 void clear(void) {

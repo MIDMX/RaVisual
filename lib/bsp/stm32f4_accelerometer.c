@@ -193,16 +193,6 @@ void BSP_ACCELERO_Sleep(void)
 		LIS3DSH_ODR_LowpowerCmd(LIS3DSH_DATARATE_POWERDOWN);
 }
 
-void BSP_ACCELERO_output_on_opendrain(void)
-{
-	uint8_t tmp;
-	tmp = 0xC0;
-	if(Lis302dlDrv.ReadID() == I_AM_LIS302DL)
-		ACCELERO_IO_Write(&tmp, LIS302DL_CTRL_REG3_ADDR, 1);
-	else if(Lis3dshDrv.ReadID() == I_AM_LIS3DSH)
-		ACCELERO_IO_Write(&tmp, LIS3DSH_CTRL_REG3_ADDR, 1);
-
-}
 /**
   * @brief  Read ID of Accelerometer component.
   * @param  None
@@ -229,15 +219,6 @@ void BSP_ACCELERO_Reset(void)
   if(AcceleroDrv->Reset != NULL)
   {
     AcceleroDrv->Reset();
-  }
-}
-
-
-void BSP_ACCELERO_DeInit(void)
-{
-  if(AcceleroDrv->DeInit != NULL)
-  {
-    AcceleroDrv->DeInit();
   }
 }
 

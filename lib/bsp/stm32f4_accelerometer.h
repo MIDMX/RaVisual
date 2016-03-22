@@ -81,11 +81,9 @@ typedef enum
   */
 /* Accelerometer functions */  
 uint8_t BSP_ACCELERO_Init(void);
-void 	BSP_ACCELERO_Sleep(void);
-void 	BSP_ACCELERO_output_on_opendrain(void);
+void BSP_ACCELERO_Sleep(void);
 uint8_t BSP_ACCELERO_ReadID(void);
 void    BSP_ACCELERO_Reset(void);
-void	BSP_ACCELERO_DeInit(void);
 void    BSP_ACCELERO_Click_ITConfig(void);
 void    BSP_ACCELERO_Click_ITClear(void);
 void    BSP_ACCELERO_GetXYZ(int16_t *pDataXYZ);

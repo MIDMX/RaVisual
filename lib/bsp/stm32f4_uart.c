@@ -9,7 +9,6 @@
 #include "stm32f4xx_hal.h"
 #include "stm32f4_uart.h"
 #include "stm32f4_gpio.h"
-#include "macro_types.h"
 
 #define USART_NB	6
 static UART_HandleTypeDef UART_HandleStructure[USART_NB];
@@ -20,7 +19,6 @@ const USART_TypeDef * instance_array[USART_NB] = {USART1, USART2, USART3, UART4,
  * @func	void UART_init(UART_HandleTypeDef * UART_HandleStructure)
  * @pre 	L'intance de l'UART doit deja etre associee au parametre (UART_HandleStructure)
  * @param	UART_HandleStructure peut recevoir comme instance : USART1, USART2 ou USART6.
- * @param	mode : UART_RECEIVE_ON_MAIN ou UART_RECEIVE_ON_IT (pour activer les interruptions sur réception de caractères)
  * @post	Cette fonction initialise les broches suivante selon l'USART choisit en parametre :
  * 				USART1 : Rx=PC7 et Tx=PB6,   init des horloge du GPIOB et de l'USART1.
  * 				USART2 : Rx=PC3 et Tx=PA2, init des horloge du GPIOA et de l'USART2.
@@ -29,7 +27,7 @@ const USART_TypeDef * instance_array[USART_NB] = {USART1, USART2, USART3, UART4,
  * 				vitesse de 115200 bauds/sec, 8N1, pas de gestion des envois et reception sur interruption.
  *
  */
-void UART_init(uint8_t uart_id, uart_interrupt_mode_e mode)
+void UART_init(uint8_t uart_id)
 {
 	uint8_t index = uart_id - 1;
 
@@ -59,56 +57,6 @@ void UART_init(uint8_t uart_id, uart_interrupt_mode_e mode)
 	
 	/*Activation de l'UART */
 	__HAL_UART_ENABLE(&UART_HandleStructure[index]);
-/*
-	if(mode == UART_RECEIVE_ON_IT)
-	{
-		// On fixe les priorités des interruptions de usart6 PreemptionPriority = 0, SubPriority = 1 et on autorise les interruptions
-		HAL_NVIC_SetPriority(USART6_IRQn , 0, 1);
-		HAL_NVIC_EnableIRQ(USART6_IRQn);
-		__HAL_UART_ENABLE_IT(&UART_HandleStructure[index],UART_IT_RXNE);
-	}
-*/
-}
-
-void USART6_IRQHandler(void)
-{
-	UART_IT_Buffer(6);
-	/*TODO :
-	 * uint8_t index = 6 - 1;
-	 * HAL_UART_IRQHandler(&instance_array[index]);
-	 */
-}
-
-
-/*TODO:
- *
-
-running_e UART_getc_it_mode(uint8_t uart_id, uint8_t * pData, uint16_t size)
-{
-	running_e ret = IN_PROGRESS;
-	uint8_t index = uart_id - 1;
-	HAL_UART_Receive_IT(&UART_HandleStructure[index], pData, size);
-	switch(err)
-	{
-		case HAL_OK:
-			ret = END_OK;
-			break;
-		default:
-			ret = END_ERROR;
-				break;
-	}
-}
- */
-
-
-/**
- * @brief 	fonction appelée par les routines d'interruption des USART : elle va chercher l'octet reçu.
- */
-void UART_IT_Buffer(uint8_t uart_id)
-{
-	uint8_t index = uart_id - 1;
-	uint8_t c;
-	c = (uint8_t)(instance_array[index]-> DR & (uint16_t)0x00FF);
 }
 
 void UART_DeInit(uint8_t uart_id)
@@ -172,7 +120,7 @@ char UART_getc(uint8_t uart_id)
 		return 0;
 		///gestion de l'erreur
 	}
-	/*Sinon on renvoie le mot reçu (contenu dans le buffer) */
+	/*Sinon on renvoie le mot reçu (contenue dans le buffer) */
 	else
 		return (char) (received);
 }

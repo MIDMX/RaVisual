@@ -322,13 +322,6 @@ static void SPIx_Init(void)
 	}
 }
 
-static void SPIx_Deinit(void)
-{
-	SpiHandle.Instance = DISCOVERY_SPIx;
-	HAL_SPI_DeInit(&SpiHandle);
-}
-
-
 /**
   * @brief  Sends a Byte through the SPI interface and return the Byte received 
   *         from the SPI bus.
@@ -517,11 +510,6 @@ void ACCELERO_IO_Init(void)
 	SPIx_Init();
 }
 
-
-void ACCELERO_IO_DeInit(void)
-{
-	SPIx_Deinit();
-}
 /**
   * @brief  Configures the Accelerometer INT2.
   *         EXTI0 is already used by user button so INT1 is not configured here.

@@ -14,15 +14,8 @@
 	/* Exported macro ------------------------------------------------------------*/
 	#define COUNTOF(__BUFFER__)   (sizeof(__BUFFER__) / sizeof(*(__BUFFER__)))
 
-
-	typedef enum
-	{
-		UART_RECEIVE_ON_MAIN = 0,
-		UART_RECEIVE_ON_IT
-	}uart_interrupt_mode_e;
-
 	//Initialise l'UART uart_id
-	void UART_init(uint8_t uart_id, uart_interrupt_mode_e mode);
+	void UART_init(uint8_t uart_id);
 
 	//Deinitialise l'UART uart_id
 	void UART_DeInit(uint8_t uart_id);

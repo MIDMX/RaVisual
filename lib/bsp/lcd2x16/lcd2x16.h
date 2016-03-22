@@ -35,23 +35,25 @@
  * Bits du port de données.
  * Adaptez ces configurations à votre design (ports et pins utilisés).
  */
-	#define PORT_DATA_0 GPIOD
-	#define PORT_DATA_1 GPIOD
-	#define PORT_DATA_2 GPIOD
-	#define PORT_DATA_3 GPIOD
-	#define	PIN_DATA_0	GPIO_PIN_8
-	#define	PIN_DATA_1	GPIO_PIN_9
-	#define	PIN_DATA_2	GPIO_PIN_10
-	#define	PIN_DATA_3	GPIO_PIN_11
+	#define PORT_DATA_0 GPIOE
+	#define PORT_DATA_1 GPIOE
+	#define PORT_DATA_2 GPIOE
+	#define PORT_DATA_3 GPIOE
+	#define	PIN_DATA_0	GPIO_PIN_10
+	#define	PIN_DATA_1	GPIO_PIN_11
+	#define	PIN_DATA_2	GPIO_PIN_12
+	#define	PIN_DATA_3	GPIO_PIN_13
 	
 	#define PORT_RS		GPIOE
 	#define PORT_RW		GPIOE
 	#define PORT_E		GPIOE
 	#define PIN_RS		GPIO_PIN_7
-	#define PIN_RW		GPIO_PIN_11
-	#define PIN_E		GPIO_PIN_12
+	#define PIN_RW		GPIO_PIN_8
+	#define PIN_E		GPIO_PIN_9
 
-	#define LCD2X16_HAL_CLOCK_ENABLE()	__HAL_RCC_GPIOD_CLK_ENABLE(); __HAL_RCC_GPIOE_CLK_ENABLE()
+	#define LCD2X16_HAL_CLOCK_ENABLE()	__HAL_RCC_GPIOE_CLK_ENABLE()
+	//Si plusieurs ports sont utilisés :
+	//#define LCD2X16_HAL_CLOCK_ENABLE()	__HAL_RCC_GPIOE_CLK_ENABLE(); __HAL_RCC_GPIOD_CLK_ENABLE();	__HAL_RCC_GPIOE_CLK_ENABLE()
 
 
 
