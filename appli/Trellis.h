@@ -24,6 +24,26 @@
 #define HT16K33_BLINK_HALFHZ 3
 
 #include "macro_types.h"
+/* Includes ------------------------------------------------------------------*/
+#include "stm32f4xx_hal.h"
+#include "stm32f4_discovery.h"
+
+#define I2C_PORT            GPIOB
+#define I2C_SIOC_PIN        GPIO_PIN_9
+#define I2C_SIOD_PIN        GPIO_PIN_6
+
+#define I2C_SIOC_H()        HAL_GPIO_WritePin(I2C_PORT, I2C_SIOC_PIN, GPIO_PIN_SET)
+#define I2C_SIOC_L()        HAL_GPIO_WritePin(I2C_PORT, I2C_SIOC_PIN, GPIO_PIN_RESET)
+
+#define I2C_SIOD_H()        HAL_GPIO_WritePin(I2C_PORT, I2C_SIOD_PIN, GPIO_PIN_SET)
+#define I2C_SIOD_L()        HAL_GPIO_WritePin(I2C_PORT, I2C_SIOD_PIN, GPIO_PIN_RESET)
+
+#define I2C_SIOD_READ()     HAL_GPIO_ReadPin(I2C_PORT, I2C_SIOD_PIN)
+#define I2C_SIOD_WRITE(bit) HAL_GPIO_WritePin(I2C_PORT, I2C_SIOD_PIN, bit);
+
+#define ACK 0
+#define NACK 1
+
 
 // this is the raw HT16K33 controller
   void begin();
@@ -34,7 +54,7 @@
   void setLED(uint8_t x);
   void clrLED(uint8_t x);
   void init(uint8_t a);
-  void I2C1_init(void);
+  void i2c_init(void);
 
   uint16_t displaybuffer[8];
   uint8_t keys[6], lastkeys[6];

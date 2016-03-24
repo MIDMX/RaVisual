@@ -7,6 +7,7 @@
 
 
 #include "appli.h"
+#include "trellis.h"
 
 /*
  * Initialisation de notrre application, et des périphériques qu'elle utilise
@@ -34,6 +35,12 @@ void APPLI_init(void)
  * @pre : doit être appelée régulièrement.
  */
 void APPLI_process_main(void){
+
+	soft_i2c_init();
+	while(1){
+		begin();
+	}
+
 
 	//Affichage de l'écran d'introduction
 	intro_logo();
