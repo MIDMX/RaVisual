@@ -26,7 +26,11 @@ void APPLI_init(void)
 	//Initialisation du touch-screen
 	TS_Init();
 
-	//lol
+	//Init i2c
+	soft_i2c_init();
+
+	// Init LED driver
+	trellis_init();
 }
 
 
@@ -36,13 +40,40 @@ void APPLI_init(void)
  */
 void APPLI_process_main(void){
 
-	soft_i2c_init();
-	while(1){
-		begin();
-	}
+	/*
+	 * TIMALLUME LES LEDS
+	 */
+
+	trellis_display();
+
+	// On allume qq leds
+	// On met à 1 des leds dans le buffer
+	/*for (int pg=0;pg<16;pg++) {
+		trellis_setLed(pg);
+		trellis_display();
+	}*/
+
+	trellis_setLed(0);
+	trellis_setLed(1);
+	trellis_setLed(2);
+	trellis_setLed(3);
+	trellis_setLed(5);
+	trellis_setLed(7);
+	trellis_setLed(9);
+	trellis_setLed(11);
+	trellis_setLed(15);
+
+	// On met à jour les LED physiques
+	trellis_display();
+
+	while (1);
 
 
-	//Affichage de l'écran d'introduction
+	/*
+	 * TIME DES DOIGTS
+	 */
+
+	/*	//Affichage de l'écran d'introduction
 	intro_logo();
 
 	//initialisation et lancement de la routine d'interruption sur le timer2
@@ -51,7 +82,7 @@ void APPLI_process_main(void){
 	//Loading menu screen
 	menu_screen();
 
-	while(1);
+	while(1);*/
 }
 
 //Cette fonction prend le dessus sur la fonction déclarée dans le fichier timer.c

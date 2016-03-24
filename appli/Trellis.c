@@ -12,14 +12,71 @@
 
 I2C_HandleTypeDef I2CHandle;
 
-/*Big thanks to kwagyeman  -> https://github.com/kwagyeman*/
-static void delay(void) // TODO: Update with clock speed knowledge for M7.
-{
-    for(volatile int i=0; i<16; i++);
+/*Big thanks to Rascafr love u babe */
+unsigned char ledLUT[16] =
+{ 0x3A, 0x37, 0x35, 0x34,
+  0x28, 0x29, 0x23, 0x24,
+  0x16, 0x1B, 0x11, 0x10,
+  0x0E, 0x0D, 0x0C, 0x02 };
+
+/* Functions */
+void trellis_init() {
+	i2c_start();
+	i2c_write_byte(0xE0);
+	i2c_write_byte(0x21);
+	i2c_stop();
+
+	for (int i=0;i<200;i++);
+
+	i2c_start();
+	i2c_write_byte(0xE0);
+	//i2c_write_byte(HT16K33_BLINK_CMD | HT16K33_BLINK_DISPLAYON|(HT16K33_BLINK_1HZ<<1));
+	i2c_write_byte(0x81);
+	i2c_stop();
+
+	for (int i=0;i<200;i++);
+
+	i2c_start();
+	i2c_write_byte(0xE0);
+	i2c_write_byte(HT16K33_CMD_BRIGHTNESS | 7);
+	i2c_stop();
 }
 
-static void i2c_start(void)
-{
+void trellis_setLed(uint8_t x) {
+	if (x > 15) return;
+	x = ledLUT[x];
+	uint16_t val = (1<<(x & 0x0F));
+	uint16_t page = x >> 4;
+	displaybuffer[page] |= val;
+}
+
+void trellis_clearLed(uint8_t x) { // TODO BUG
+	if (x > 15) return;
+	x = ledLUT[x];
+	uint16_t val = ~(1<<(x & 0x0F));
+	uint16_t page = x >> 4;
+	displaybuffer[page] &= val;
+}
+
+void trellis_display() {
+	i2c_start();
+	i2c_write_byte(0xE0);
+	i2c_write_byte(0x00); // 1st addr
+
+	for (int l=0;l<8;l++) {
+		i2c_write_byte(displaybuffer[l] & 0xFF);
+		i2c_write_byte(displaybuffer[l] >> 8);
+	}
+
+	i2c_stop();
+}
+
+/*Big thanks to kwagyeman  -> https://github.com/kwagyeman*/
+void delay(void) {
+    for(volatile int i=0; i<60; i++);
+}
+
+void i2c_start(void) {
     /* The start of data transmission occurs when
        SIO_D is driven low while SIO_C is high */
     I2C_SIOD_L();
@@ -28,8 +85,7 @@ static void i2c_start(void)
     delay();
 }
 
-static void i2c_stop(void)
-{
+void i2c_stop(void) {
     /* The stop of data transmission occurs when
        SIO_D is driven high while SIO_C is high */
     I2C_SIOC_H();
@@ -38,10 +94,7 @@ static void i2c_stop(void)
     delay();
 }
 
-
-
-static char i2c_write_byte(uint8_t data)
-{
+char i2c_write_byte(uint8_t data) {
     char i;
 
     for(i=0; i<8; i++) {
@@ -96,7 +149,7 @@ void soft_i2c_init()
 {
     GPIO_InitTypeDef GPIO_InitStructure;
     GPIO_InitStructure.Pull  = GPIO_NOPULL;
-    GPIO_InitStructure.Speed = GPIO_SPEED_LOW;
+    GPIO_InitStructure.Speed = GPIO_SPEED_HIGH;
     GPIO_InitStructure.Mode  = GPIO_MODE_OUTPUT_OD;
 
     GPIO_InitStructure.Pin = I2C_SIOC_PIN;
@@ -114,56 +167,3 @@ void soft_i2c_init()
     }
 }
 
-
-void begin() {
-	i2c_start();
-	//soft_i2c_write_bytes(0x00,(uint8_t*)0x00,16,FALSE); //TODO: check with oscilloscope
-	i2c_write_byte(0x08); //	<- this works
-	i2c_stop();
-}
-
-/*
-void setLED(uint8_t x) {
-  if (x > 15) return;
- // x = pgm_read_byte(&ledLUT[x]);
-  displaybuffer[x >> 4] |= _BV(x & 0x0F);
-}
-void clrLED(uint8_t x) {
-  if (x > 15) return;
-//  x = pgm_read_byte(&ledLUT[x]);
-  displaybuffer[x >> 4] &= ~_BV(x & 0x0F);
-}
-
-
-void setBrightness(uint8_t b) {
-  if (b > 15) b = 15;
- // I2C_start(I2C1, SLAVE_ADDRESS<<1, I2C_Direction_Transmitter);
-  I2C_write(I2C1, 0x01); // write one byte to the slave
-  I2C_stop(I2C1); // stop the transmission
-  I2C_write(I2C1, HT16K33_CMD_BRIGHTNESS | b);
-  I2C_stop(I2C1); // stop the transmission
-}
-
-void blinkRate(uint8_t b) {
-//  I2C_start(I2C1, SLAVE_ADDRESS<<1, I2C_Direction_Transmitter);
-  if (b > 3) b = 0; // turn off if not sure
-  I2C_write(I2C1,HT16K33_BLINK_CMD | HT16K33_BLINK_DISPLAYON | (b << 1));
-  I2C_stop(I2C1);
-}
-
-
-void writeDisplay(void) {
-//I2C_start(I2C1, SLAVE_ADDRESS<<1, I2C_Direction_Transmitter);
-I2C_write(I2C1,(uint8_t)0x00); // start at address $00
-
-  for (uint8_t i=0; i<8; i++) {
-	  I2C_write(I2C1,displaybuffer[i] & 0xFF);
-	  I2C_write(I2C1,displaybuffer[i] >> 8);
-  }
-  I2C_stop(I2C1);
-}
-
-void clear(void) {
-  memset(displaybuffer, 0, sizeof(displaybuffer));
-}
-*/

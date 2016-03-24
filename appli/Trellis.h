@@ -44,20 +44,21 @@
 #define ACK 0
 #define NACK 1
 
+uint16_t displaybuffer[8]; // led buffere
 
-// this is the raw HT16K33 controller
-  void begin();
-  void setBrightness(uint8_t b);
-  void blinkRate(uint8_t b);
-  void writeDisplay(void);
-  void clear(void);
-  void setLED(uint8_t x);
-  void clrLED(uint8_t x);
-  void init(uint8_t a);
-  void i2c_init(void);
+// utile
 
-  uint16_t displaybuffer[8];
-  uint8_t keys[6], lastkeys[6];
-  uint8_t i2c_addr;
+/* Prototypes */
+void trellis_init();
+void trellis_setLed(uint8_t x);
+void trellis_clearLed(uint8_t x);
+void trellis_display();
+
+void i2c_start(void);
+void i2c_stop(void);
+char i2c_write_byte(uint8_t data);
+
+uint8_t keys[6], lastkeys[6];
+uint8_t i2c_addr;
 
 #endif // _TRELLIS_H_
