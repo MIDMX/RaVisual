@@ -31,6 +31,9 @@ void APPLI_init(void)
 
 	// Init LED driver
 	trellis_init();
+
+	// Init encoder
+	init_encoder();
 }
 
 
@@ -52,20 +55,42 @@ void APPLI_process_main(void){
 		trellis_setLed(pg);
 		trellis_display();
 	}*/
+int i = 0;
+int toggle = 0;
 
+while(1){
+
+	trellis_setBrightness(i);
 	trellis_setLed(0);
 	trellis_setLed(1);
 	trellis_setLed(2);
 	trellis_setLed(3);
+	trellis_setLed(4);
 	trellis_setLed(5);
+	trellis_setLed(6);
 	trellis_setLed(7);
+	trellis_setLed(8);
 	trellis_setLed(9);
+	trellis_setLed(10);
 	trellis_setLed(11);
+	trellis_setLed(12);
+	trellis_setLed(13);
+	trellis_setLed(14);
 	trellis_setLed(15);
 
 	// On met à jour les LED physiques
 	trellis_display();
-
+	if(i<15 && toggle == 0){
+		i++;
+	}else{
+		toggle = 1;
+		i--;
+		if(i==0){
+			toggle = 0;
+		}
+	}
+	for(int j=0;j<500000;j++);
+}
 	while (1);
 
 
@@ -73,7 +98,7 @@ void APPLI_process_main(void){
 	 * TIME DES DOIGTS
 	 */
 
-	/*	//Affichage de l'écran d'introduction
+	/*//Affichage de l'écran d'introduction
 	intro_logo();
 
 	//initialisation et lancement de la routine d'interruption sur le timer2
